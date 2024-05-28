@@ -136,7 +136,7 @@ NB: To deploy kops, you need to have a domain name registered (In my case, it is
 1. Start up the kops server and the cluster nodes
     - Do `kubectl get nodes` to see all nodes
 
-2. `kubectl create ns name-of-namespace` to create a namespace
+2. `kubectl create ns mongo` to create a namespace (called mongo)
     - Do `kubectl get ns` to see the default and defined namespaces
 
 3. Configure the mongo-secret, mongo-configmap, mongo-deployment and mongo-express with namespace data
@@ -145,40 +145,40 @@ NB: To deploy kops, you need to have a domain name registered (In my case, it is
 
     - `vi mongo-secret.yaml` and paste the code
     - Do `kubectl apply -f mongo-secret.yaml`
-    - `kubectl get secret -n name-of-namespace`
+    - `kubectl get secret -n mongo`
 
     - `kubectl get all -A` to see which resources are deployed in the various namespaces
-    - `kubectl get all -n name-of-namespace` to see resources in particular namespaces
+    - `kubectl get all -n mongo` to see resources in particular namespaces
 
     - `vi mongo-configmap.yaml` and paste code
     - Do `kubectl create -f mongo-configmap.yaml` to apply
-    - `kubectl get cm -n name-of-namespace`
+    - `kubectl get cm -n mongo`
 
-    - `vi mongo-deployment.yaml` and paste code
-    - Do `kubectl create -f mongo-deploment.yaml`
-    - `kubectl get deployment -n name-of-namespace`
+    - `vi mongo-deployment.yaml` and paste code. This will create both deployment and service
+    - Do `kubectl create -f mongo-deployment.yaml`
+    - `kubectl get deployment -n mongo`
 
     + For mongo-express.yaml, under service, specify: 'type: NodePort' and 'nodePort: 30000' //This should not be used in production. Only for testing. In production, you use loadbalancer or ingress.
     - `vi mongo-express.yaml` and paste code
     - `kubectl create -f mongo-express.yaml`
-    - `kubectl get pod -n name-of-namespace`
-    - `kubectl get pod name-of-pod -n name-of-namespace -o wide`
-    - `kubectl describe pod name-of-pod -n mane-of-namespace`
-    - `kubectl get svc -n name-of-namespace`
+    - `kubectl get pod -n mongo`
+    - `kubectl get pod name-of-pod -n mongo -o wide`
+    - `kubectl describe pod name-of-pod -n mongo`
+    - `kubectl get svc -n mongo`
         - Next, open port 30000 up in the security group (All traffic - My IP)
         - Copy public Ip of the instance and open on web with port 30000.
         - Create database and collections
     
     + Using LoadBalancer instead of NodePort
-        - `kubectl get svc -n namespace` to see both deployments
-        - `kubectl edit svc mongo-express-service -n namespace`
+        - `kubectl get svc -n mongo` to see both deployments
+        - `kubectl edit svc mongo-express-service -n mongo`
             - Edit the file:
                 + Change type to LoadBalancer //This creates a 'Classic' load balancer on aws.
                 + Remove '- nodePort: 30000'
                 + Adjust as '- port: 80'
                 + Save
-        - `kubectl get svc -n namespace`
-        - `kubectl describe svc mongo-express-service -n namespace`
+        - `kubectl get svc -n mongo`
+        - `kubectl describe svc mongo-express-service -n mongo`
         - Go to the instance page of aws and open 'Load Balancers'
             - There will be an active loadbalancer created by kubectl
             - Copy the DNS name and open in browser
@@ -191,7 +191,7 @@ NB: To deploy kops, you need to have a domain name registered (In my case, it is
                 + Create records
         - Now, mongo-express.domain-name will resolve to the mongo express page.
 
-**Using ingress to communicate with different services in different namespaces**
+## Using ingress to communicate with different services in different namespaces
 
 > Using the docker image from jenkins for the app
 
