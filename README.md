@@ -101,7 +101,17 @@ NB: To deploy kops, you need to have a domain name registered (In my case, it is
 
     - You can now confirm your instances, s3 bucket, route 53 records, vpcs, internet gateways, subnets, route tables, auto-scaling groups
 
+    ![instances](./imgs/instances.png)
+
+    ![vpc](./imgs/vpc.png)
+
+    ![asgs](./imgs/asgs.png)
+
+    ![s3](./imgs/s3-bucket.png)
+
     `kops validate cluster devops.360cloudops.com --state=s3://name-of-s3-bucket` (devops.360cloudops.com is the name of my cluster) (may need to wait a few minutes before validation)
+
+    ![validate-cluster](./imgs/validate-cluster.png)
 
     `kubectl get nodes`
 
