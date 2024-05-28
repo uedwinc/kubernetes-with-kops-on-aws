@@ -56,12 +56,12 @@ NB: To deploy kops, you need to have a domain name registered (In my case, it is
 
 12. Create hosted zone and map to dns
     - Go to route 53 dashboard on the IAM account login and click on hosted zones
-    - Create hosted zone (eg kops-devops.uedwinc.net) (kops-devops serve as subdomain)
+    - Create hosted zone (eg kops-devops.360cloudops.com) (kops-devops serve as subdomain)
     - Make it public hosted
     - Creating the hosted zone creates 4 name servers (under 'Records', and 'Value/Route traffic to')
 
 13. Root User login section
-    - Under Route 53 > Hosted zones > uedwinc.net, click on create record
+    - Under Route 53 > Hosted zones > 360cloudops.com, click on create record
     - Switch to quick create.
     - Under record name, enter subdomain
     - Under record type, choose NS - Name servers for a hosted zone
@@ -70,7 +70,7 @@ NB: To deploy kops, you need to have a domain name registered (In my case, it is
     - Confirm that status is INSYNC
 
 14. Confirm
-    - Do `nslookup -type=ns kops-devops.uedwinc.net`
+    - Do `nslookup -type=ns devops.360cloudops.com`
 
 15. Installations
     - Install kubectl on the linux server following https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/ using the binary with curl approach
@@ -88,25 +88,25 @@ NB: To deploy kops, you need to have a domain name registered (In my case, it is
 
 16. Creating cluster using kops
     ```sh
-       kops create cluster --name=kops-devops.uedwinc.net \ (name of dns ie kops-devops.uedwinc.net)
+       kops create cluster --name=devops.360cloudops.com \ (name of dns ie devops.360cloudops.com)
        --state=s3://s3-bucket-name --zones=us-east-2a,us-east-2b \ (s3 is bucket we created earlier and zones are ones we're in)
        --node-count=2 --node-size=t3.small \ (specifications for the two worker nodes)
-       --master-size=t3.medium --dns-zone=kops-devops.uedwinc.net \ (specifications for the master node)
+       --master-size=t3.medium --dns-zone=devops.360cloudops.com \ (specifications for the master node)
        --node-volume-size=8 --master-volume-size=8
     ```
     - This will create our cluster and put some files in our s3 bucket
 
 17. Bringing up the cluster
-    `kops update cluster --name kops-devops.uedwinc.net --state=s3://name-of-bucket --yes --admin`
+    `kops update cluster --name devops.360cloudops.com --state=s3://name-of-bucket --yes --admin`
 
     - You can now confirm your instances, s3 bucket, route 53 records, vpcs, internet gateways, subnets, route tables, auto-scaling groups
 
-    `kops validate cluster kops-devops.uedwinc.net --state=s3://name-of-s3-bucket` (kops-devops.uedwinc.net is the name of my cluster) (may need to wait a few minutes before validation)
+    `kops validate cluster devops.360cloudops.com --state=s3://name-of-s3-bucket` (devops.360cloudops.com is the name of my cluster) (may need to wait a few minutes before validation)
 
     `kubectl get nodes`
 
 18. Deleting cluster
-    `kops delete cluster --name=kops-devops.uedwinc.net --state=s3://s3-bucket-name --yes`
+    `kops delete cluster --name=devops.360cloudops.com --state=s3://s3-bucket-name --yes`
 
 19. Managing kubernetes configuration
     - In the home (~) directory of your server, do `ls -a`
