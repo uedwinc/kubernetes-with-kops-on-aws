@@ -1,6 +1,17 @@
 # Kubernetes with Kops on AWS
 
-- To deploy kops, you need to have a domain name registered
+Kubernetes Operations (kOps) is used to provision kubernetes infrastructure on the cloud. It helps to create, destroy, upgrade and maintain production-grade, highly available, Kubernetes cluster.
+
+https://kops.sigs.k8s.io/
+
+In this project, we will setup the following:
+    - A kubernetes cluster on AWS using kOps
+    - Deploy a mongodb and mongo-express service on the cluster
+    - Deploy a web application on the cluster and setup connection with mongodb
+
+NB: To deploy kops, you need to have a domain name registered (In my case, it is 360cloudops.com)
+
+## Create a Kubernetes cluster with kOps
 
 1. Create a kops server (this can be a t2.micro) with ubuntu AMI
     - Create a new key pair
